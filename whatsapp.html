@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atendente automático de WhatsApp · demonstração</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060A13;color:#E8EEF9;font-family:Inter,sans-serif;min-height:100vh}
+a{color:inherit}
+.demo{background:#2F7BFF;color:#fff;text-align:center;font-size:13px;padding:7px 12px;font-weight:600}
+.layout{max-width:1120px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:center}
+h1{font-size:clamp(34px,5vw,54px);line-height:1.05;letter-spacing:-.04em;font-weight:800}
+h1 span{color:#3D86FF}
+.lead{color:#A9B5CC;font-size:18px;margin:18px 0 26px;max-width:480px}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:520px}
+.kpi div{background:rgba(16,24,42,.85);border:1px solid rgba(61,134,255,.28);border-radius:16px;padding:16px}
+.kpi b{display:block;font-size:26px;color:#4BE08E;letter-spacing:-.02em}
+.kpi span{font-size:13px;color:#A9B5CC}
+.note{font-size:13px;color:#6B7894;margin-top:14px;max-width:520px}
+.phone{background:#0B141A;border-radius:36px;border:10px solid #1B2433;overflow:hidden;height:720px;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(47,123,255,.2)}
+.top{background:#202C33;display:flex;align-items:center;gap:12px;padding:14px 16px}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#D4A24C,#8a6420);display:grid;place-items:center;font-weight:800;color:#1A1407}
+.top b{display:block;font-size:16px}.top small{color:#4BE08E;font-size:12.5px}
+.chat{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:8px;background:#0B141A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23ffffff10'/%3E%3C/svg%3E")}
+.m{max-width:82%;padding:8px 11px 6px;border-radius:10px;font-size:14.5px;line-height:1.4;white-space:pre-line;animation:in .25s ease}
+.m small{display:block;text-align:right;font-size:10.5px;color:#8696A0;margin-top:2px}
+.bot{align-self:flex-start;background:#202C33;border-top-left-radius:2px}
+.me{align-self:flex-end;background:#005C4B;border-top-right-radius:2px}
+.typing{align-self:flex-start;background:#202C33;border-radius:10px;padding:10px 14px;font-size:20px;letter-spacing:2px;color:#8696A0}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;background:#111B21;border-top:1px solid #222D34;min-height:58px}
+.quick button{background:#1F2C34;color:#53BDEB;border:1px solid #2A3942;border-radius:18px;padding:8px 12px;font-size:13.5px;cursor:pointer;font-weight:600}
+.quick button:hover{background:#2A3942}
+.restart{margin-top:22px;background:transparent;color:#5CC8FF;border:1.5px solid rgba(61,134,255,.4);border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:600}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.phone{height:620px}}
+</style></head><body>
+<div class="demo">Projeto demonstrativo: simulador de atendimento automático · feito por <a href="index.html">Leon | Dev &amp; Automação</a></div>
+<div class="layout">
+  <div>
+    <h1>Seu WhatsApp atendendo <span>sozinho</span>, 24h por dia.</h1>
+    <p class="lead">Teste agora: toque nas opções do celular ao lado e veja o bot responder, mostrar preços e agendar um horário sem ninguém digitar.</p>
+    <div class="kpi"><div><b>~2s</b><span>pra responder</span></div><div><b>24/7</b><span>sem pausa</span></div><div><b>0</b><span>mensagens esquecidas</span></div></div>
+    <p class="note">Os números acima descrevem como o bot funciona, não resultados de um cliente específico. A versão real roda no número que o negócio já usa, com as regras e os horários dele.</p>
+    <button class="restart" onclick="start()">↺ Recomeçar conversa</button>
+  </div>
+  <div class="phone">
+    <div class="top"><div class="av">N</div><div><b>Barbearia Navalha</b><small id="st">online</small></div></div>
+    <div class="chat" id="chat"></div>
+    <div class="quick" id="quick"></div>
+  </div>
+</div>
+<script>
+const chat=document.getElementById('chat'),quick=document.getElementById('quick');
+const now=()=>new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+let ag={};
+function add(txt,who){const m=document.createElement('div');m.className='m '+who;m.innerHTML=txt+`<small>${now()}${who==='me'?' ✓✓':''}</small>`;chat.appendChild(m);chat.scrollTop=chat.scrollHeight}
+function bot(txt,btns,delay=900){
+  quick.innerHTML='';const t=document.createElement('div');t.className='typing';t.textContent='•••';chat.appendChild(t);chat.scrollTop=chat.scrollHeight;
+  document.getElementById('st').textContent='digitando...';
+  setTimeout(()=>{t.remove();document.getElementById('st').textContent='online';add(txt,'bot');show(btns)},delay)}
+function show(btns){quick.innerHTML='';(btns||[]).forEach(([l,f])=>{const b=document.createElement('button');b.textContent=l;b.onclick=()=>{add(l,'me');f()};quick.appendChild(b)})}
+const MENU=[["💈 Ver preços",precos],["📅 Agendar horário",agendar],["📍 Endereço",endereco],["🙋 Falar com atendente",humano]];
+function menu(){bot('Posso ajudar em mais alguma coisa?',MENU)}
+function start(){chat.innerHTML='';ag={};show([["Oi, tudo bem?",ola]])}
+function ola(){bot('Oi! 👋 Aqui é o atendimento automático da *Barbearia Navalha*.\nComo posso te ajudar?',MENU)}
+function precos(){bot('💈 *Tabela de preços*\nCorte: R$ 45\nBarba: R$ 35\nCorte + Barba: R$ 70\nSobrancelha: R$ 15',[["📅 Quero agendar",agendar],["Voltar ao menu",menu]])}
+function agendar(){bot('Show! Qual serviço? ✂️',[["Corte",()=>dia('Corte')],["Barba",()=>dia('Barba')],["Corte + Barba",()=>dia('Corte + Barba')]])}
+function dia(s){ag.s=s;bot('Pra qual dia? 📆',[["Hoje",()=>hora('hoje')],["Amanhã",()=>hora('amanhã')],["Sábado",()=>hora('sábado')]])}
+function hora(d){ag.d=d;bot(`Tenho estes horários livres ${d}:`,[["10:00",()=>conf('10:00')],["14:30",()=>conf('14:30')],["17:00",()=>conf('17:00')]])}
+function conf(h){ag.h=h;bot(`Confirma? 👇\n*${ag.s}* · ${ag.d} às *${h}*`,[["✅ Confirmar",ok],["Trocar horário",()=>hora(ag.d)]])}
+function ok(){bot(`✅ *Agendado!* ${ag.s}, ${ag.d} às ${ag.h}.\nVou te mandar um lembrete 1h antes. Até lá! 💈`,[["Valeu!",menu]],1100)}
+function endereco(){bot('📍 Rua Exemplo, 123, Centro\n🕘 Seg a sáb, 9h às 20h',[["📅 Agendar horário",agendar],["Voltar ao menu",menu]])}
+function humano(){bot('Beleza! Já avisei a equipe 🙋 Um atendente te responde por aqui em instantes.\n(Enquanto isso, o bot continua de olho.)',[["Voltar ao menu",menu]])}
+start();
+// na prévia do portfólio, a conversa anda sozinha
+if(window!==window.top){const seq=['Oi, tudo bem?','📅 Agendar horário','Corte + Barba','Amanhã','17:00','✅ Confirmar'];let i=0;
+  setInterval(()=>{const b=[...quick.querySelectorAll('button')].find(b=>b.textContent===seq[i]);if(b){b.click();i++}if(i>=seq.length&&!quick.querySelector('button[data-x]')){}},1600)}
+</script></body></html>

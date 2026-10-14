@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel de vendas e estoque · demonstração</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0F1A;--card:#111827;--line:#1F2A3D;--tx:#E8EEF9;--tx2:#8D9AB3;--blue:#3D86FF;--green:#4BE08E;--red:#FF5A6A;--amber:#FFC24D}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:Inter,sans-serif}
+a{color:inherit}
+.demo{background:#2F7BFF;color:#fff;text-align:center;font-size:13px;padding:7px 12px;font-weight:600}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 33px)}
+aside{background:#0D1320;border-right:1px solid var(--line);padding:22px 16px}
+.lg{font-weight:800;font-size:18px;margin-bottom:26px;display:flex;gap:10px;align-items:center}
+.lg i{width:30px;height:30px;border-radius:8px;background:var(--blue);display:grid;place-items:center;font-style:normal}
+aside a{display:block;padding:10px 12px;border-radius:10px;color:var(--tx2);font-size:14.5px;margin-bottom:4px;text-decoration:none}
+aside a.on{background:rgba(61,134,255,.14);color:var(--tx)}
+main{padding:26px 28px}
+.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px}
+.hd h1{font-size:24px;letter-spacing:-.02em}
+.hd span{color:var(--tx2);font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.k small{color:var(--tx2);font-size:13px}
+.k b{display:block;font-size:26px;margin:6px 0 2px;letter-spacing:-.02em}
+.k em{font-style:normal;font-size:12.5px;font-weight:600}
+.up{color:var(--green)}.dn{color:var(--red)}
+.row{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.box h2{font-size:15px;margin-bottom:14px;display:flex;justify-content:space-between}
+.box h2 span{color:var(--tx2);font-weight:500;font-size:13px}
+svg text{fill:var(--tx2);font-size:11px;font-family:Inter}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--tx2);font-weight:500;font-size:12.5px;padding:8px 6px;border-bottom:1px solid var(--line)}
+td{padding:10px 6px;border-bottom:1px solid var(--line)}
+.pill{font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px}
+.ok{background:rgba(75,224,142,.12);color:var(--green)}.low{background:rgba(255,194,77,.12);color:var(--amber)}.out{background:rgba(255,90,106,.14);color:var(--red)}
+.alert{display:flex;gap:10px;align-items:flex-start;background:rgba(255,194,77,.08);border:1px solid rgba(255,194,77,.3);border-radius:12px;padding:12px;font-size:13.5px;margin-bottom:10px}
+.bar{height:8px;border-radius:4px;background:#1B2537;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--blue);border-radius:4px}
+.top li{list-style:none;margin-bottom:12px;font-size:14px}
+.top li div{display:flex;justify-content:space-between}
+@media(max-width:900px){.app{grid-template-columns:1fr}aside{display:none}.kpis{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}main{padding:18px}}
+</style></head><body>
+<div class="demo">Projeto demonstrativo: dados fictícios de uma loja de exemplo · feito por <a href="index.html">Leon | Dev &amp; Automação</a></div>
+<div class="app">
+<aside><div class="lg"><i>▦</i>Painel Loja</div><a class="on" href="#">📊 Visão geral</a><a href="#">🛒 Vendas</a><a href="#">📦 Estoque</a><a href="#">👥 Clientes</a><a href="#">⚙️ Ajustes</a></aside>
+<main>
+  <div class="hd"><div><h1>Visão geral</h1><span>Loja exemplo · dados fictícios atualizados automaticamente</span></div><span class="mono" id="hoje"></span></div>
+  <div class="kpis">
+    <div class="k"><small>Faturamento do mês</small><b>R$ 38.420</b><em class="up">▲ 12% vs mês passado</em></div>
+    <div class="k"><small>Pedidos</small><b>412</b><em class="up">▲ 8%</em></div>
+    <div class="k"><small>Ticket médio</small><b>R$ 93,25</b><em class="up">▲ 3%</em></div>
+    <div class="k"><small>Itens com estoque baixo</small><b>3</b><em class="dn">precisa repor</em></div>
+  </div>
+  <div class="row">
+    <div class="box"><h2>Vendas por dia <span>últimos 14 dias</span></h2><svg id="ch" viewBox="0 0 640 230" width="100%"></svg></div>
+    <div class="box"><h2>Alertas automáticos</h2>
+      <div class="alert">⚠️ <div><b>Camiseta Preta M</b> acaba em ~3 dias no ritmo atual.</div></div>
+      <div class="alert">⚠️ <div><b>Boné Azul</b> está com 4 unidades.</div></div>
+      <div class="alert" style="background:rgba(255,90,106,.08);border-color:rgba(255,90,106,.3)">⛔ <div><b>Moletom Cinza G</b> esgotou. Avisar fornecedor?</div></div>
+      <h2 style="margin-top:16px">Mais vendidos</h2>
+      <ul class="top" id="maisVendidos"></ul></div>
+  </div>
+  <div class="box" style="margin-top:14px"><h2>Estoque <span>atualiza a cada venda</span></h2>
+    <table><thead><tr><th>Produto</th><th>Vendidos (mês)</th><th>Em estoque</th><th>Status</th></tr></thead><tbody id="tb"></tbody></table></div>
+</main></div>
+<script>
+document.getElementById('hoje').textContent=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
+const v=[1840,2210,1960,2580,3120,3480,2240,2050,2390,2710,3010,3620,3900,2780];
+const W=640,H=230,P=30,mx=4200,bw=(W-P*2)/v.length;
+let s='';[0,1400,2800,4200].forEach(y=>{const yy=H-P-(y/mx)*(H-P*2);s+=`<line x1="${P}" x2="${W-10}" y1="${yy}" y2="${yy}" stroke="#1F2A3D"/><text x="0" y="${yy+4}">${y/1000}k</text>`});
+v.forEach((x,i)=>{const h=(x/mx)*(H-P*2),X=P+i*bw+4;s+=`<rect x="${X}" y="${H-P-h}" width="${bw-8}" height="${h}" rx="5" fill="${i===v.length-2?'#5CC8FF':'#3D86FF'}" opacity="${i>=v.length-7?1:.55}"/>`;if(i%2===0)s+=`<text x="${X}" y="${H-10}">${i+1}</text>`});
+document.getElementById("ch").innerHTML=s;
+const P_=[["Camiseta Preta M",86,5,"low"],["Calça Jeans 42",54,22,"ok"],["Moletom Cinza G",47,0,"out"],["Boné Azul",39,4,"low"],["Tênis Branco 40",31,14,"ok"],["Meia (kit 3)",72,60,"ok"]];
+document.getElementById("tb").innerHTML=P_.map(([n,s,e,c])=>`<tr><td>${n}</td><td>${s}</td><td>${e}</td><td><span class="pill ${c}">${c==='ok'?'OK':c==='low'?'Baixo':'Esgotado'}</span></td></tr>`).join('');
+const mxs=86;document.getElementById("maisVendidos").innerHTML=P_.slice().sort((a,b)=>b[1]-a[1]).slice(0,4).map(([n,s])=>`<li><div><span>${n}</span><b>${s}</b></div><div class="bar"><i style="width:${s/mxs*100}%"></i></div></li>`).join('');
+</script></body></html>

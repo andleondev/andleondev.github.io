@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Barbearia Navalha · demonstração</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0D0B;--card:#1A1814;--gold:#D4A24C;--tx:#F3EEE4;--tx2:#B8AE9C;--line:rgba(212,162,76,.25)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:Inter,sans-serif;line-height:1.55}
+a{color:inherit;text-decoration:none}
+.demo{background:#2F7BFF;color:#fff;text-align:center;font-size:13px;padding:7px 12px;font-weight:600}
+.demo a{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{display:flex;justify-content:space-between;align-items:center;height:72px}
+.brand{font-family:Oswald,sans-serif;font-size:26px;letter-spacing:2px;text-transform:uppercase}
+.brand span{color:var(--gold)}
+.btn{display:inline-block;background:var(--gold);color:#1A1407;font-weight:700;padding:14px 26px;border-radius:8px;border:0;cursor:pointer;font-size:16px}
+.btn.out{background:transparent;border:1.5px solid var(--gold);color:var(--gold)}
+.hero{min-height:520px;display:flex;align-items:center;background:linear-gradient(90deg,rgba(14,13,11,.96) 35%,rgba(14,13,11,.55)),repeating-linear-gradient(135deg,#2a241a 0 22px,#1f1b14 22px 44px);border-bottom:1px solid var(--line)}
+.hero h1{font-family:Oswald,sans-serif;font-size:clamp(44px,7vw,84px);line-height:1;text-transform:uppercase;letter-spacing:1px;max-width:640px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--tx2);font-size:19px;margin:18px 0 28px;max-width:480px}
+.meta{display:flex;gap:22px;margin-top:26px;color:var(--tx2);font-size:15px;flex-wrap:wrap}
+.meta b{color:var(--gold)}
+section{padding:72px 0}
+h2{font-family:Oswald,sans-serif;font-size:40px;text-transform:uppercase;letter-spacing:1px;margin-bottom:28px}
+h2 span{color:var(--gold)}
+.svc{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.item{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;cursor:pointer;transition:border-color .2s,transform .2s}
+.item:hover,.item.sel{border-color:var(--gold);transform:translateY(-2px)}
+.item h3{font-size:18px}.item p{color:var(--tx2);font-size:14px}
+.item b{font-family:Oswald,sans-serif;font-size:24px;color:var(--gold)}
+.book{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px;display:grid;gap:22px}
+.book h4{font-size:14px;color:var(--tx2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{padding:11px 16px;border-radius:8px;border:1.5px solid var(--line);cursor:pointer;font-weight:600;font-size:15px;background:transparent;color:var(--tx)}
+.opt.sel{background:var(--gold);color:#1A1407;border-color:var(--gold)}
+.opt[disabled]{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.sum{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px}
+.sum span{color:var(--tx2)}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.gal div{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;font-size:56px;background:radial-gradient(circle at 30% 30%,#3a3123,#1a1712);border:1px solid var(--line)}
+.rev{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rev div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;font-size:15px;color:var(--tx2)}
+.rev b{display:block;color:var(--gold);margin-bottom:8px}
+.map{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.mapbox{height:240px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(rgba(212,162,76,.08) 1px,transparent 1px) 0 0/30px 30px,linear-gradient(90deg,rgba(212,162,76,.08) 1px,transparent 1px) 0 0/30px 30px,#15130f;display:grid;place-items:center;font-size:44px}
+footer{padding:30px 0;color:var(--tx2);font-size:14px;border-top:1px solid var(--line);text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:#25D366;color:#062014;font-weight:700;padding:14px 22px;border-radius:12px;transition:transform .3s;max-width:90vw}
+#toast.on{transform:translateX(-50%) translateY(0)}
+@media(max-width:760px){.svc,.rev,.map{grid-template-columns:1fr}.gal{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<div class="demo">Projeto demonstrativo: a Barbearia Navalha é fictícia · feito por <a href="index.html">Leon | Dev &amp; Automação</a></div>
+<div class="wrap"><header><div class="brand">Barbearia <span>Navalha</span></div><a class="btn" href="#agendar">Agendar</a></header></div>
+<div class="hero"><div class="wrap">
+  <h1>Corte de <span>respeito</span>, sem fila.</h1>
+  <p>Escolha o serviço, o dia e o horário. Seu agendamento chega direto no nosso WhatsApp.</p>
+  <a class="btn" href="#agendar">Agendar meu horário</a> <a class="btn out" href="#servicos">Ver preços</a>
+  <div class="meta"><span>★ <b>4,9</b> no Google</span><span>📍 Centro</span><span>🕘 Seg a sáb · 9h às 20h</span></div>
+</div></div>
+
+<section id="servicos"><div class="wrap">
+  <h2>Serviços e <span>preços</span></h2>
+  <div class="svc" id="svc"></div>
+</div></section>
+
+<section id="agendar" style="padding-top:0"><div class="wrap">
+  <h2>Agende em <span>3 toques</span></h2>
+  <div class="book">
+    <div><h4>1 · Serviço</h4><div class="opts" id="o-svc"></div></div>
+    <div><h4>2 · Dia</h4><div class="opts" id="o-dia"></div></div>
+    <div><h4>3 · Horário</h4><div class="opts" id="o-hora"></div></div>
+    <div class="sum"><span id="resumo">Escolha serviço, dia e horário.</span><button class="btn" id="enviar">Confirmar no WhatsApp</button></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2>Nossos <span>cortes</span></h2>
+  <div class="gal"><div>💈</div><div>✂️</div><div>🧔</div><div>🪒</div></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2>Como <span>chegar</span></h2>
+  <div class="map"><div class="mapbox">📍</div><div><p style="color:var(--tx2);font-size:17px">Rua Exemplo, 123, Centro<br>Estacionamento na rua · acessível</p><br><a class="btn out" href="#agendar">Agendar agora</a></div></div>
+</div></section>
+
+<footer>Barbearia Navalha (negócio fictício para demonstração) · site por Leon | Dev &amp; Automação</footer>
+<div id="toast"></div>
+<script>
+const S=[["Corte","Tesoura ou máquina, finalizado",45],["Barba","Toalha quente e navalha",35],["Corte + Barba","O combo mais pedido",70],["Pigmentação","Disfarça falhas",30],["Sobrancelha","Na navalha",15],["Infantil","Até 12 anos",35]];
+const st={svc:null,dia:null,hora:null};
+const svc=document.getElementById('svc');
+S.forEach(([n,d,p],i)=>{const e=document.createElement('div');e.className='item';e.innerHTML=`<div><h3>${n}</h3><p>${d}</p></div><b>R$ ${p}</b>`;e.onclick=()=>{pick('svc',i);location.hash='agendar'};svc.appendChild(e)});
+function opts(id,list,key,dis=[]){const box=document.getElementById(id);box.innerHTML='';list.forEach((l,i)=>{const b=document.createElement('button');b.className='opt'+(st[key]===i?' sel':'');b.textContent=l;b.disabled=dis.includes(i);b.onclick=()=>pick(key,i);box.appendChild(b)})}
+const dias=[...Array(6)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return i===0?'Hoje':i===1?'Amanhã':d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit'})});
+const horas=['09:00','10:00','11:00','13:30','14:30','15:30','17:00','18:00','19:00'];
+function pick(k,i){st[k]=i;if(k==='dia')st.hora=null;draw()}
+function draw(){
+  opts('o-svc',S.map(s=>s[0]),'svc');opts('o-dia',dias,'dia');
+  const busy=st.dia===null?[]:[(st.dia*2+1)%9,(st.dia*3+4)%9]; // horários ocupados de exemplo
+  opts('o-hora',horas,'hora',busy);
+  document.querySelectorAll('#svc .item').forEach((e,i)=>e.classList.toggle('sel',st.svc===i));
+  const ok=st.svc!==null&&st.dia!==null&&st.hora!==null;
+  document.getElementById('resumo').innerHTML=ok?`<b style="color:var(--tx)">${S[st.svc][0]}</b> · ${dias[st.dia]} às ${horas[st.hora]} · R$ ${S[st.svc][2]}`:'Escolha serviço, dia e horário.';
+}
+document.getElementById('enviar').onclick=()=>{
+  const t=document.getElementById('toast');
+  t.textContent=st.svc!==null&&st.dia!==null&&st.hora!==null?`✅ No site real, isso abriria o WhatsApp com: "Quero agendar ${S[st.svc][0]} ${dias[st.dia].toLowerCase()} às ${horas[st.hora]}"`:'Escolha serviço, dia e horário primeiro 😉';
+  t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3800)};
+draw();
+</script></body></html>
