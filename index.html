@@ -88,6 +88,20 @@ h2{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.035em;line-
 .avatar{aspect-ratio:1;border-radius:28px;background:radial-gradient(circle at 30% 25%,#3D86FF,#1F5BE0 45%,#0E2F82);display:grid;place-items:center;position:relative;box-shadow:0 0 80px rgba(47,123,255,.35)}
 .avatar span{font-size:clamp(120px,18vw,200px);font-weight:800;color:#fff;line-height:1}
 .avatar small{position:absolute;bottom:14%;font-family:'JetBrains Mono',monospace;color:#BFE6FF;font-size:28px;font-weight:600}
+.gallery{position:relative;aspect-ratio:4/5;border-radius:28px;overflow:hidden;border:1px solid var(--line);box-shadow:0 0 80px rgba(47,123,255,.25);background:#0B1222}
+.slides{display:flex;height:100%;transition:transform .5s ease}
+.slides>*{flex:0 0 100%;height:100%}
+.slides img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery .avatar{border-radius:0;box-shadow:none}
+.gallery .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(6,10,19,.6);color:#fff;font-size:26px;cursor:pointer;backdrop-filter:blur(6px);display:none}
+.gallery .prev{left:12px}.gallery .next{right:12px}
+.gallery .dots{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:8px}
+.gallery .dots b{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer}
+.gallery .dots b.on{background:#fff;width:22px;border-radius:4px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+.facts div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.facts b{display:block;font-size:22px;letter-spacing:-.02em;color:var(--sky)}
+.facts span{font-size:13.5px;color:var(--tx2)}
 .stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 
 /* contato */
@@ -105,7 +119,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .grid3,.projects{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr 1fr}
   .about{grid-template-columns:1fr}
-  .avatar{max-width:280px}
+  .gallery{max-width:420px;width:100%;margin:0 auto}
+  .facts{grid-template-columns:1fr 1fr 1fr}
   nav ul{display:none}
 }
 @media (max-width:520px){.steps{grid-template-columns:1fr}.contact{padding:40px 22px}.hero{padding-top:64px}}
@@ -219,13 +234,24 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </div></section>
 
 <section id="sobre"><div class="wrap about">
-  <div class="avatar rv"><span>L</span><small>&lt;/&gt;</small></div>
+  <div class="gallery rv" id="galeria" aria-label="Fotos do Leon">
+    <div class="slides" id="slides"><div class="avatar"><span>L</span><small>&lt;/&gt;</small></div></div>
+    <button class="nav prev" id="gPrev" aria-label="Foto anterior">‹</button>
+    <button class="nav next" id="gNext" aria-label="Próxima foto">›</button>
+    <div class="dots" id="gDots"></div>
+  </div>
   <div class="rv">
     <span class="tag">sobre</span>
     <h2>Prazer, eu sou o <span class="blue">Leon</span></h2>
-    <p class="sub">Estudante de Ciência da Computação, com formação em cibersegurança e hacking ético. Uso tecnologia (e muita IA) pra resolver problema de negócio de verdade, e penso em segurança desde a primeira linha: seus dados e os dos seus clientes protegidos.</p>
-    <p class="sub" style="margin-top:12px">Aberto a projetos freelance e a oportunidades na área.</p>
-    <div class="stack"><span class="chip">HTML · CSS · JS</span><span class="chip">Python</span><span class="chip">APIs de WhatsApp</span><span class="chip">Automação</span><span class="chip">IA</span><span class="chip">Cibersegurança</span></div>
+    <p class="sub">Sou militar da Força Aérea Brasileira há 6 anos, e em 5 deles trabalho na área de TI dentro do quartel. Foi lá que aprendi o que mais levo pro meu trabalho: disciplina, responsabilidade e o costume de fazer as coisas funcionarem quando alguém precisa delas.</p>
+    <p class="sub" style="margin-top:14px">Hoje curso Ciência da Computação e tenho formação em cibersegurança, hacking ético e Claude Code. Sou daqueles que gostam de entender como cada coisa funciona por dentro, e tecnologia sempre foi mais paixão do que obrigação.</p>
+    <p class="sub" style="margin-top:14px">Agora coloco isso a serviço de pequenos negócios: sites, automações e ferramentas feitos com cuidado, comunicação clara e segurança levada a sério.</p>
+    <div class="facts">
+      <div><b>6 anos</b><span>Força Aérea Brasileira</span></div>
+      <div><b>5 anos</b><span>atuando em TI</span></div>
+      <div><b>CC</b><span>Ciência da Computação</span></div>
+    </div>
+    <div class="stack"><span class="chip">Cibersegurança</span><span class="chip">Hacker Ético</span><span class="chip">Claude Code</span><span class="chip">HTML · CSS · JS</span><span class="chip">Python</span><span class="chip">Automação</span></div>
   </div>
 </div></section>
 
@@ -254,6 +280,21 @@ document.querySelectorAll('[data-wpp]').forEach(a=>{
   a.href = "https://wa.me/"+WPP+"?text="+encodeURIComponent(a.dataset.wpp);
   a.target = "_blank"; a.rel = "noopener";
 });
+// galeria do "Sobre": coloque as fotos em fotos/ e liste aqui (a 1ª aparece primeiro)
+const FOTOS = [];
+(function(){
+  if(!FOTOS.length) return;
+  const sl=document.getElementById('slides'),dots=document.getElementById('gDots');let i=0;
+  sl.innerHTML=FOTOS.map((f,k)=>`<img src="${f}" alt="Foto do Leon ${k+1}" loading="lazy">`).join('');
+  dots.innerHTML=FOTOS.map((_,k)=>`<b data-k="${k}"></b>`).join('');
+  const go=k=>{i=(k+FOTOS.length)%FOTOS.length;sl.style.transform=`translateX(-${i*100}%)`;dots.querySelectorAll('b').forEach((d,n)=>d.classList.toggle('on',n===i))};
+  if(FOTOS.length>1){document.querySelectorAll('.gallery .nav').forEach(b=>b.style.display='block')}
+  gPrev.onclick=()=>go(i-1);gNext.onclick=()=>go(i+1);dots.onclick=e=>{if(e.target.dataset.k)go(+e.target.dataset.k)};
+  let t=setInterval(()=>go(i+1),4500);document.getElementById('galeria').onmouseenter=()=>clearInterval(t);
+  let x0=null;sl.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  sl.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)go(i+(dx<0?1:-1));x0=null});
+  go(0);
+})();
 document.getElementById('y').textContent = new Date().getFullYear();
 // prévias dos projetos: encaixa o iframe de 1280px no card
 function fit(){document.querySelectorAll('.shot').forEach(s=>{const f=s.querySelector('iframe');f.style.transform=`scale(${s.clientWidth/1280})`})}
